@@ -49,3 +49,4 @@ flexi_env/*
 TODO.txt
 temp.json
 auth_responses.json
+Services/.env

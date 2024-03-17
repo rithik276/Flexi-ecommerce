@@ -33,27 +33,6 @@ class CartProduct(BaseModel):
         ordering = ('-created_at',)
 
 
-
-# class CartItems(BaseModel):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     quantity = models.IntegerField(default=1)    
-#     class Meta:
-#         db_table = 'cart_items'
-#         unique_together = ('product',)
-#         ordering = ('-created_at',)
-
-# class Cart(BaseModel):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     product = models.ManyToManyField(Product)
-#     quantity = models.IntegerField(default=1)
-
-#     class Meta:
-#         db_table = 'cart'
-#         unique_together = ('user',)
-#         ordering = ('-created_at',)
-
-
 class Order(BaseModel):
     user = models.ForeignKey(User, related_name='user_orders', on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, related_name='order_carts', on_delete=models.CASCADE)

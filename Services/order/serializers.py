@@ -9,15 +9,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','email','name']
 
-# class CartProductSerializer(serializers.ModelSerializer):
-#     cart_items_id = serializers.UUIDField(source ='uid')
-#     product = ProductSerializer()
-#     user = UserSerializer()
-#     class Meta:
-#         model = CartProduct
-#         # fields = ["cart_items_id","user","product","quantity","created_at"]
-#         fields = "__all__"
-
 class CartSerializer(serializers.ModelSerializer):
     cart_id = serializers.UUIDField(source ='uid')
     products = ProductSerializer(many=True)
@@ -29,10 +20,29 @@ class CartSerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     favorite_id = serializers.UUIDField(source ='uid')
+    product = ProductSerializer()
     user = UserSerializer()
     class Meta:
         model = Favorite
         fields = ["favorite_id","created_at","product","user"]
+
+
+
+class CartOrderSerializer(serializers.ModelSerializer):
+    cart_id = serializers.UUIDField(source ='uid')
+    products = ProductSerializer(many=True)
+    class Meta:
+        model = Cart
+        fields = ["cart_id","products","created_at"]
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    order_id = serializers.UUIDField(source ='uid')
+    user = UserSerializer()
+    cart = CartOrderSerializer()
+    class Meta:
+        model = Order
+        fields = ["order_id","user","cart","paid_amount","shipping_address","phone","created_at"]
 
 
 

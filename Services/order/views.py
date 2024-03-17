@@ -2,9 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
+
 from .models import Cart,Favorite,Order,CartProduct
 from products.models import Product
-from .serializers import CartSerializer,FavoriteSerializer
+from .serializers import CartSerializer,FavoriteSerializer,OrderSerializer
 
 class CartView(APIView):
     def get(self,request):
@@ -114,8 +116,80 @@ class AddUpdateFavoriteView(CartView):
 
 
 class OrderView(APIView):
-    pass
+    
+    def get(self,request):
+        user = request.user
+        order = Order.objects.filter(user=user)
+        serializer = OrderSerializer(order,many=True).data
+        
+        if not serializer:
+            return Response({"orders": {},"msg":'Orders not found'},status=status.HTTP_404_NOT_FOUND)
+        
+        return Response({"orders":serializer,"msg":'order fetched successfully'},status=status.HTTP_200_OK)
 
+
+
+class CreateOrderView(APIView):
+    '''
+    #PAYLOAD
+    {
+        "cart_id":"d0cbbe5b-f17d-4215-b873-e2f2274e762b",
+        "paid_amount":12,
+        "shipping_address":"as",
+        "phone":"1254"
+    }
+    '''
+    def post(self, request):
+        user = request.user
+        data = request.data
+
+        # Validate required fields
+        required_fields = ['cart_id', 'paid_amount', 'shipping_address', 'phone']
+        for field in required_fields:
+            if field not in data:
+                return Response({"error": f"Field '{field}' is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if user.is_authenticated:
+            try:
+                cart = Cart.objects.get(uid=data['cart_id'])
+            except Cart.DoesNotExist:
+                return Response({"error": "Cart not found"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Extract necessary fields and create Order object
+            order_data = {
+                'user': user,
+                'cart':cart,
+                'paid_amount': data['paid_amount'],
+                'shipping_address': data['shipping_address'],
+                'phone': data['phone'],
+            }
+
+            try:
+                order_item = Order.objects.create(**order_data)
+                return Response({"message": "Order created successfully"}, status=status.HTTP_201_CREATED)
+            except ValidationError as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({"error": "User not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+class DeleteOrderView(APIView):
+    def delete(self, request):
+        user = request.user
+        order_id = request.query_params["order_id"]
+
+        if user.is_authenticated:
+            try:
+                order = Order.objects.get(uid=order_id, user=user)
+                order.delete()
+                return Response({"message": "Order deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+            except Order.DoesNotExist:
+                return Response({"error": "Order not found"}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"error": "User not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+        
 
 
 
