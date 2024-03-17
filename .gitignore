@@ -46,7 +46,9 @@ media
 
 Flexi web files/*
 flexi_env/*
-TODO.txt
+
 temp.json
 auth_responses.json
 Services/.env
+FRONTEND_TODO.txt
+BACKEND_TODO.txt
