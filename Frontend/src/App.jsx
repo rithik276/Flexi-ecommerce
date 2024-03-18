@@ -1,12 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import Home from "./containers/Home/Home";
+import Products from "./containers/Products/Products";
 
 const App = () => {
   return (
-    <div>
+    <>
       <Home />
-    </div>
+      {/* <Products /> */}
+    </>
   );
 };
 

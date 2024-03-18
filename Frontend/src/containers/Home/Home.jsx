@@ -1,7 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import flexi_logo from "../../assets/images/LOGOS/flexi_logo.png";
-import flexi_gradient from "../../assets/images/flexi_gradient.png";
-import home_shoe from "../../assets/images/main_page_shoe.png";
+import home_shoe from "../../assets/images/HomePage/home_jordan.png";
 
 import InstagramIcon from "@mui/icons-material/Instagram";
 import XIcon from "@mui/icons-material/X";
@@ -11,63 +11,100 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 const Home = () => {
   return (
     <>
-      <div className=" flex items-center bg-black bg-gradient-to-r from-black via-transparent to-orange-500 max-h-screen w-screen relative">
-        {/* Left Side HomePage */}
-        <div className="p-12 h-screen  w-[55%]">
-          <div className="text-white flex items-center justify-around">
-            <div className="w-40">
-              <img src={flexi_logo} alt="" />
-            </div>
-            <h5 className="text-3xl font-bold">Home</h5>
-            <h5 className="text-3xl font-bold">Favorite</h5>
-            <h5 className="text-3xl font-bold">Cart</h5>
-            <h5 className="text-3xl font-bold">Login</h5>
+      <div className="bg-[#1B1B1B] h-screen w-screen">
+        {/* navbar */}
+        <div className="w-full h-28 flex items-center justify-between">
+          <div className="w-52 ml-36 mt-12 ">
+            <img src={flexi_logo} alt="" />
           </div>
-
-          <div className="text-white mt-20 px-10 flex flex-col items-center">
-            <h1 className="font-outfit text-center text-9xl font-semibold ">
-              Flexi's best Collection
-            </h1>
-            <p className="mt-6 p-4 text-4xl font-outfit font-light text-center">
-              Visit us here to get the best collection of FLEXI and buy your
-              favourite shoes
-            </p>
-            <div>
-              <button className="bg-orange-600 mt-10 text-3xl font-semibold py-5 px-28 rounded-2xl">
-                START SHOPPING
-              </button>
-            </div>
+          <div className="flex w-4/5 mt-12  text-white">
+            <h5 className="text-3xl font-bold ml-32">Home</h5>
+            <h5 className="text-3xl font-bold ml-32">Favorite</h5>
+            <h5 className="text-3xl font-bold ml-32">Cart</h5>
+            <h5 className="text-3xl font-bold ml-32">Login</h5>
           </div>
         </div>
+        {/* navbar */}
 
-        {/* Right Side HomePage */}
-        <div className="w-[45%] h-screen  relative">
-          <div className="absolute w-[24rem] overflow-hidden h-screen ml-[8rem]">
-            <img className="" src={flexi_gradient} alt="" />
+        {/* Content */}
+        <div className="flex">
+          {/* left content */}
+          <div className="h-3/5 w-[50%]">
+            <div className="text-white mt-24 px-10 flex flex-col items-center">
+              <h1 className="font-outfit text-center text-8xl font-semibold ">
+                Flexi's best Collection
+              </h1>
+              <p className="mt-5 mx-20 p-5 text-2xl font-outfit font-light text-center">
+                Visit us here to get the best collection of FLEXI and buy your
+                favourite shoes
+              </p>
+              <div className="mt-5">
+                <button className="bg-orange-600 text-3xl font-semibold py-5 px-28 rounded-2xl">
+                  START SHOPPING
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="absolute z-10 mt-36">
-            <img className="w-[38rem]" src={home_shoe} alt="" />
+          {/* left content */}
+
+          {/* right content */}
+          <div className="mt-12 mr-28">
+            {/* <div className="border relative mt-10 ml-10"> */}
+            <div className="absolute w-[50%] right-20 z-20">
+              <img src={home_shoe} alt="" />
+            </div>
+            <div className="bg-[#FF5C00] ml-16 rounded-full  flex p-5">
+              {/* F047FF */}
+              <div className="bg-gradient-to-b from-[#4764FF] to-[#F047FF] rounded-full  p-6 flex  z-1">
+                <div className="bg-gradient-to-b from-[#0029FF] to-[#FF0606] rounded-full flex  p-14 z-2">
+                  <div className="bg-gradient-to-b from-[#98F600] to-[#00660A] rounded-full flex p-36 z-2">
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* </div> */}
           </div>
-          <div className=" h-full flex justify-end">
-            <div className="flex flex-col items-end justify-center space-y-10">
-              <div className=" w-20 h-15">
+          <div className="flex flex-col items-end justify-center space-y-10 ">
+            <a href="https://www.instagram.com/" target="_blank">
+              <div className="w-20 h-15">
                 <InstagramIcon
                   className="text-white"
                   style={{ fontSize: 50 }}
                 />
               </div>
+            </a>
+            <a
+              href="https://twitter.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className=" w-20 h-15">
                 <XIcon className="text-white" style={{ fontSize: 50 }} />
               </div>
+            </a>
+            <a
+              href="https://www.facebook.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className=" w-20 h-15">
                 <FacebookIcon className="text-white" style={{ fontSize: 50 }} />
               </div>
+            </a>
+            <a
+              href="https://www.youtube.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <div className=" w-20 h-15">
                 <YouTubeIcon className="text-white" style={{ fontSize: 50 }} />
               </div>
-            </div>
+            </a>
           </div>
+          {/* right content */}
         </div>
+        {/* Content */}
       </div>
     </>
   );
