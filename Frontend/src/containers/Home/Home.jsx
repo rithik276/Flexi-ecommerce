@@ -141,7 +141,7 @@ const Home = () => {
               </p>
               <div className="mt-5 flex items-center justify-center xl:flex-none">
                 <NavLink to={"/products"}>
-                  <button className="mt-7 rounded-2xl bg-orange-600 px-9 py-4 text-2xl font-semibold xl:mt-2 xl:px-28 xl:py-5 xl:text-3xl">
+                  <button className="rounded-2xl bg-orange-600 px-9 py-4 text-2xl font-semibold xl:mt-2 xl:px-28 xl:py-5 xl:text-3xl">
                     START SHOPPING
                   </button>
                 </NavLink>
