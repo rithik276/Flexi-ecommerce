@@ -9,7 +9,6 @@ import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { NavLink } from "react-router-dom";
-import HomeBurgerMenu from "../../components/HomeBurgerMenu";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +52,9 @@ const Home = () => {
             <div className="fixed right-0 top-0 z-20 h-full w-1/2 bg-black/50 text-center text-white backdrop-blur-2xl">
               <div
                 onClick={toggleNavbar}
-                className="mr-9 mt-10 flex justify-end"
+                className="mr-9 mt-8 flex justify-end"
               >
-                <CloseIcon className="text-white" style={{ fontSize: 40 }} />
+                <CloseIcon className="text-white" style={{ fontSize: 50 }} />
               </div>
               <div className="flex flex-col justify-between space-y-56">
                 <div className="mt-10 flex flex-col gap-y-7">
