@@ -1,15 +1,15 @@
 import React from "react";
 import Nav from "../../components/Nav";
 
-const Products = () => {
+const Favorite = () => {
   return (
-    <>
+    <div>
       <Nav />
       <div>
-        <h1>Products</h1>
+        <h1>Favorite</h1>
       </div>
-    </>
+    </div>
   );
 };
 
-export default Products;
+export default Favorite;

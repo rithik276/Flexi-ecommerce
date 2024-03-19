@@ -21,7 +21,7 @@ const Home = () => {
         {/* navbar */}
         <div className="flex h-28 w-full items-center justify-between">
           <NavLink to={"/"}>
-            <div className="ml-8 w-36 xl:ml-36 xl:mt-12 xl:w-52 ">
+            <div className="ml-8 w-36 pb-8 pt-8 xl:ml-36 xl:w-52 xl:pb-12 xl:pt-24">
               <img src={flexi_logo} alt="" />
             </div>
           </NavLink>
@@ -132,16 +132,16 @@ const Home = () => {
           {/* left content */}
           <div className="sm:w-1/2 xl:h-3/5 xl:w-[50%]">
             <div className="flex flex-col px-6 text-white xl:mt-24 xl:items-center  xl:px-10">
-              <h1 className="mt-12 text-center font-outfit text-6xl font-semibold xl:mt-0 xl:text-8xl ">
+              <h1 className="mt-9 text-center font-outfit text-6xl font-semibold xl:mt-0 xl:text-8xl ">
                 Flexi's best Collection
               </h1>
-              <p className="mt-5 text-center font-outfit text-xl font-light xl:mx-20 xl:p-5">
+              <p className="mt-4 text-center font-outfit text-xl font-light xl:mx-20 xl:p-5">
                 Visit us here to get the best collection of FLEXI and buy your
                 favourite shoes
               </p>
               <div className="mt-5 flex items-center justify-center xl:flex-none">
                 <NavLink to={"/products"}>
-                  <button className="mt-7 rounded-2xl bg-orange-600 px-9 py-4 text-2xl font-semibold xl:mt-2 xl:px-28 xl:py-5 xl:text-3xl">
+                  <button className="rounded-2xl bg-orange-600 px-9 py-4 text-2xl font-semibold xl:mt-2 xl:px-28 xl:py-5 xl:text-3xl">
                     START SHOPPING
                   </button>
                 </NavLink>
@@ -151,7 +151,7 @@ const Home = () => {
           {/* left content */}
 
           {/* right content */}
-          <div className="mr-0 mt-12 xl:mr-28">
+          <div className="mr-0 mt-1 xl:mr-28 xl:mt-12">
             <div className="top-22 absolute z-10 hidden w-[100%] xl:right-20  xl:block xl:w-[50%]">
               <img src={home_shoe} alt="" className="" />
             </div>

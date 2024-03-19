@@ -3,6 +3,8 @@ import React from "react";
 import Home from "./containers/Home/Home";
 import Products from "./containers/Products/Products";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Cart from "./containers/Cart/Cart";
+import Favorite from "./containers/Favorite/Favorite";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -17,6 +19,14 @@ const App = () => {
     {
       path: "products",
       element: <Products />,
+    },
+    {
+      path: "cart",
+      element: <Cart />,
+    },
+    {
+      path: "favorite",
+      element: <Favorite />,
     },
   ]);
   return <RouterProvider router={router} />;
