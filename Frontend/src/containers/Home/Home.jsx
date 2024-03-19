@@ -10,7 +10,6 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { NavLink } from "react-router-dom";
 import HomeBurgerMenu from "../../components/HomeBurgerMenu";
-import NavLinks from "./NavLinks";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +26,20 @@ const Home = () => {
               <img src={flexi_logo} alt="" />
             </div>
           </NavLink>
-          <NavLinks />
+          <div className="hidden text-white xl:mt-12 xl:flex  xl:w-4/5">
+            <NavLink to={"/"}>
+              <h5 className="ml-32 text-3xl font-bold">Home</h5>
+            </NavLink>
+            <NavLink to={"/favorite"}>
+              <h5 className="ml-32 text-3xl font-bold">Favorite</h5>
+            </NavLink>
+            <NavLink to={"/cart"}>
+              <h5 className="ml-32 text-3xl font-bold">Cart</h5>
+            </NavLink>
+            <NavLink to={"/login"}>
+              <h5 className="ml-32 text-3xl font-bold">Login</h5>
+            </NavLink>
+          </div>
           <div className="mr-8 block xl:hidden">
             <button onClick={toggleNavbar}>
               {isOpen ? (
@@ -37,6 +49,82 @@ const Home = () => {
               )}
             </button>
           </div>
+          {isOpen && (
+            <div className="fixed right-0 top-0 z-20 h-full w-1/2 bg-black/50 text-center text-white backdrop-blur-2xl">
+              <div
+                onClick={toggleNavbar}
+                className="mr-9 mt-10 flex justify-end"
+              >
+                <CloseIcon className="text-white" style={{ fontSize: 40 }} />
+              </div>
+              <div className="flex flex-col justify-between space-y-56">
+                <div className="mt-10 flex flex-col gap-y-7">
+                  <NavLink to={"/"} onClick={toggleNavbar}>
+                    <h5 className="text-2xl font-bold">Home</h5>
+                  </NavLink>
+                  <NavLink to={"/favorite"}>
+                    <h5 className="text-2xl font-bold">Favorite</h5>
+                  </NavLink>
+                  <NavLink to={"/cart"}>
+                    <h5 className="text-2xl font-bold">Cart</h5>
+                  </NavLink>
+                  <NavLink to={"/login"}>
+                    <h5 className="text-2xl font-bold">Login</h5>
+                  </NavLink>
+                </div>
+                <div className="flex flex-wrap items-center justify-center space-y-10">
+                  <div className=" flex space-x-2 ">
+                    <a href="https://www.instagram.com/" target="_blank">
+                      <div className="h-15 w-20">
+                        <InstagramIcon
+                          className="text-white"
+                          style={{ fontSize: 30 }}
+                        />
+                      </div>
+                    </a>
+                    <a
+                      href="https://twitter.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className=" h-15 w-20">
+                        <XIcon
+                          className="text-white"
+                          style={{ fontSize: 30 }}
+                        />
+                      </div>
+                    </a>
+                  </div>
+                  <div className="flex space-x-2">
+                    <a
+                      href="https://www.facebook.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className=" h-15 w-20">
+                        <FacebookIcon
+                          className="text-white"
+                          style={{ fontSize: 30 }}
+                        />
+                      </div>
+                    </a>
+                    <a
+                      href="https://www.youtube.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className=" h-15 w-20">
+                        <YouTubeIcon
+                          className="text-white"
+                          style={{ fontSize: 35 }}
+                        />
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         {/* navbar */}
 
@@ -65,7 +153,7 @@ const Home = () => {
 
           {/* right content */}
           <div className="mr-0 mt-12 xl:mr-28">
-            <div className="top-22 absolute z-20 hidden w-[100%] xl:right-20  xl:block xl:w-[50%]">
+            <div className="top-22 absolute z-10 hidden w-[100%] xl:right-20  xl:block xl:w-[50%]">
               <img src={home_shoe} alt="" className="" />
             </div>
             <div className="flex items-center justify-center xl:flex-none">
@@ -77,7 +165,7 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="relative z-20 -mt-72 w-[100%]  xl:hidden">
+            <div className="relative z-10 -mt-72 w-[100%]  xl:hidden">
               <img src={home_shoe} alt="" className="" />
             </div>
           </div>
