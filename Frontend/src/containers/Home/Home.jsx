@@ -17,7 +17,7 @@ const Home = () => {
   };
   return (
     <>
-      <div className="h-screen w-screen overflow-x-hidden bg-[#1B1B1B]">
+      <div className="bg-bg h-screen w-screen overflow-x-hidden">
         {/* navbar */}
         <div className="flex h-28 w-full items-center justify-between">
           <NavLink to={"/"}>

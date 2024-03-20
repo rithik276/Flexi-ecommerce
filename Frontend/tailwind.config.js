@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         outfit: ["outfit", "sans-serif"],
       },
+      colors: {
+        bg: "#1b1b1b",
+      },
     },
   },
   plugins: [],
