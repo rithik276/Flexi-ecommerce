@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/images/LOGOS/flexi_logo.png";
+<<<<<<< HEAD
 import { NavLink } from "react-router-dom";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { TiShoppingCart } from "react-icons/ti";
@@ -33,6 +34,14 @@ const Nav = () => {
         <NavLink to={"/cart"}>
           <TiShoppingCart className="text-white" style={{ fontSize: 60 }} />
         </NavLink>
+=======
+
+const Nav = () => {
+  return (
+    <div>
+      <div>
+        <img src={logo} alt="" />
+>>>>>>> 24c207691f70ef44c655fceaf0a177c5c4a1cd62
       </div>
     </div>
   );
