@@ -19,6 +19,13 @@ class ProductSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields  = ['product_id','product_name','product_description','get_absolute_url','brand']
 
+class ProductSearchSerializer(serializers.ModelSerializer):
+    product_id = serializers.UUIDField(source = 'uid')
+    class Meta:
+        model = Product
+        # fields = "__all__"
+        fields  = ['product_id','product_name','get_absolute_url']
+
 class ProductVariantSerializer(serializers.ModelSerializer):
     product_variant_id = serializers.UUIDField(source = 'uid')
     product = ProductSerializer()

@@ -1,7 +1,5 @@
 import React from "react";
 import Nav from "../../components/Nav";
-import { NavLink } from "react-router-dom";
-import { MdOutlineFavoriteBorder } from "react-icons/md";
 import Product from "../../components/Product";
 
 const Products = () => {

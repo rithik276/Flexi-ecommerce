@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import ProductVariant,Product,Brand
-from .serializers import ProductVariantSerializer,BrandSerializer,ProductSerializer
+from .serializers import ProductVariantSerializer,BrandSerializer,ProductSerializer,ProductSearchSerializer
 from django.db.models import Q
 from rest_framework import status
 
@@ -33,11 +33,11 @@ class GetAllProductsView(APIView):
 class SearchProductView(APIView):
 
     def post(self, request):
-        query = request.data.get('query')
+        query = request.query_params['query']
 
         if query:
             products = Product.objects.filter(Q(product_name__icontains=query) | Q(product_description__icontains=query) | Q(brand__brand_name__icontains=query))
-            products_data = ProductSerializer(products, many=True).data
+            products_data = ProductSearchSerializer(products, many=True).data
             if not products_data:
                 return Response({"products": [],"msg":'Data not found'},status=status.HTTP_404_NOT_FOUND)
             return Response(products_data,status=status.HTTP_200_OK)

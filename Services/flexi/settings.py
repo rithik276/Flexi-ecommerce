@@ -30,7 +30,8 @@ SECRET_KEY = 'django-insecure-9-ex_)b+rkslk$!xip-#0@)^ih39$4(im*8ll___7_3k*%1u%0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -48,11 +49,13 @@ INSTALLED_APPS = [
     'products',
     'order',
     'rest_framework',
+    'corsheaders',
     'rest_framework.authtoken',
     'djoser',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -215,7 +218,17 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
+
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+    "http://192.168.0.128:5173",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:8080",
+    "http://localhost:5173",
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+)
