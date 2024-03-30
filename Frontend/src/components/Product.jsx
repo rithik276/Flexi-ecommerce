@@ -1,20 +1,31 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdOutlineFavorite } from "react-icons/md";
-import shoe from "../assets/images/AIR FORCE 1/air_force_1_cyan.png";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Product = () => {
+const Product = ({ product }) => {
   const [favClick, setFavClick] = useState(false);
-  
-  const toggleClick = () => {
+  const navigate = useNavigate();
+  const toggleClick = (e) => {
+    e.stopPropagation();
     setFavClick(!favClick);
   };
+  console.log(product);
   return (
-    <NavLink to={`${1}`}>
-      <div className="relative">
-        <div className="flex h-32 w-full items-center justify-center rounded-3xl border-4 border-orange-500 bg-white lg:h-40 lg:w-64">
-          <img src={shoe} alt="" className="pt-8 h-fit w-fit object-fill" />
+    <>
+      <div style={{ cursor: "pointer" }} className="relative">
+        <div
+          onClick={() =>
+            navigate(`/products${product.product.get_absolute_url}`)
+          }
+          className="flex h-32 w-full items-center justify-center rounded-3xl border-4 border-orange-500 bg-white lg:h-2/3 lg:w-64"
+        >
+          <img
+            src={`http://localhost:8000/${product.variants[0].image}`}
+            alt=""
+            className="p-7"
+          />
 
           <div
             onClick={toggleClick}
@@ -35,12 +46,14 @@ const Product = () => {
         </div>
         <div className="mt-3 text-center text-white">
           <h3 className=" text-sm font-semibold lg:text-2xl">
-            Jordan Max Aura 4
+            {product.product.product_name}
           </h3>
-          <h5 className="text-sm font-bold lg:text-lg">$499.00</h5>
+          <h5 className="text-sm font-bold lg:text-lg">
+            Rs.{product.variants[0].price}
+          </h5>
         </div>
       </div>
-    </NavLink>
+    </>
   );
 };
 

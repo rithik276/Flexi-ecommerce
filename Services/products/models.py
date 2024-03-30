@@ -74,6 +74,16 @@ class ProductVariant(BaseModel):
     def __str__(self):
         return self.product.product_name + ' ' + self.color_name 
     
+    def save(self):
+        super().save()
+
+        img = Image.open(self.image.path)
+
+        if img.height > 300 or img.width > 300:
+            new_img = (300, 300)
+            img.thumbnail(new_img)
+            img.save(self.image.path)
+    
     class Meta:
         db_table  = 'product_variant'
 

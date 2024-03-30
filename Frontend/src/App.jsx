@@ -5,6 +5,7 @@ import Products from "./containers/Products/Products";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Cart from "./containers/Cart/Cart";
 import Favorite from "./containers/Favorite/Favorite";
+import ProductsPage from "./containers/Products/ProductsPage";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -17,15 +18,19 @@ const App = () => {
       element: <Home />,
     },
     {
-      path: "products",
+      path: "/products",
       element: <Products />,
     },
     {
-      path: "cart",
+      path: "/products/:brand/:productName",
+      element: <ProductsPage />,
+    },
+    {
+      path: "/cart",
       element: <Cart />,
     },
     {
-      path: "favorite",
+      path: "/favorite",
       element: <Favorite />,
     },
   ]);
