@@ -1,0 +1,58 @@
+#TODO:
+MAIL = flexi.ecomm@gmail.com
+PASSWORD = wwda hkzx ejww ftur
+
+Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzExOTA3MTA4LCJpYXQiOjE3MTA2MTExMDgsImp0aSI6IjUwOGM0MjU3NWMzYTRhN2ViYTAzMzAxZGIyMmQ3MzI4IiwidXNlcl9pZCI6IjcxNGFjY2QxLWY1NzUtNDY1Yy1hOWUyLWNjY2U2ZGFlNjQ5YiJ9.CYihKviDKWA_EcqZjW1fVar9Ijwhm0RdTEO7OZMdaUU
+
+Make User Model
+Make Cart Model     => cart model should be foreign key to user
+Make Favorite Model => model should be foreign key to user
+Make Order Model    => order model should be foreign key to cart
+
+
+'''
+Products
+-> Get All Product ✅
+-> Search Product ✅
+-> Product List based on product id ✅
+-> Filter Products ✅
+-> List Brands✅
+-> Products based on Brands✅
+
+Cart
+-> Add to Cart✅
+-> Update Cart ✅
+-> List Cart ✅
+
+Favorite
+-> Add to Favorite ✅
+-> Delete Favorite ✅
+-> List Favorite ✅
+
+Order:
+-> List Order ✅
+-> Create Order✅
+-> Cancel Order✅
+-> Download Invoice
+-> Mail Invoice
+
+Modify Email Templates for accounts
+
+'''
+
+Authentication and Authorization
+
+Django & React Authentication
+https://www.youtube.com/watch?v=QFDyXWRYQjY&list=PLJRGQoqpRwdfoa9591BcUS6NmMpZcvFsM
+
+
+Admin Page after Frontend is done
+
+when deployed check this settings once
+# EMAIL_PORT = 587
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+
+change this values appropriately when deployed
+"ACCESS_TOKEN_LIFETIME": timedelta(days=15),
+"REFRESH_TOKEN_LIFETIME": timedelta(days=15),

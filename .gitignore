@@ -44,11 +44,4 @@ packages/react-devtools-timeline/dist
 __pycache__
 media
 
-Flexi web files/*
-flexi_env/*
 
-temp.json
-auth_responses.json
-Services/.env
-FRONTEND_TODO.txt
-BACKEND_TODO.txt

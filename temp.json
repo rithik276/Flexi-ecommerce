@@ -1,0 +1,80 @@
+"temp": {
+    "product": {
+      "product_id": "b8073e3c-0407-433c-8967-d3c6e5b4d197",
+      "product_name": "Retro high",
+      "product_description": "Retro high",
+      "get_absolute_url": "/puma/retro-high/",
+      "brand": {
+        "brand_id": "8c360530-23ef-4dbf-aac1-bb7e4994a6fb",
+        "brand_name": "Puma",
+        "brand_image": "/media/brands/puma/PUMA_LOGO.png",
+        "slug": "puma",
+        "get_absolute_url": "/puma/"
+      }
+    },
+    "product_variant_id": "2fff9ddd-1c5a-4c95-9dc7-35700d9c197f",
+    "color_name": "Black",
+    "price": 4000,
+    "image": "/media/products/retro-high/PUMA_RETRO_BLACK.png",
+    "size_stock": {
+      "6": 22,
+      "7": 222,
+      "8": 10,
+      "9": 12,
+      "10": 1,
+      "11": 200
+    },
+    "get_absolute_url": "/retro-high/Black/2fff9ddd-1c5a-4c95-9dc7-35700d9c197f"
+  }
+
+{
+  "temp": [
+    {
+      "product_id": "b8073e3c-0407-433c-8967-d3c6e5b4d197",
+      "product_variant_id": "2fff9ddd-1c5a-4c95-9dc7-35700d9c197f",
+      "color_name": "Black",
+      "price": 4000,
+      "image": "/media/products/retro-high/PUMA_RETRO_BLACK.png",
+      "size_stock": {
+        "6": 22,
+        "7": 222,
+        "8": 10,
+        "9": 12,
+        "10": 1,
+        "11": 200
+      },
+      "get_absolute_url": "/retro-high/Black/2fff9ddd-1c5a-4c95-9dc7-35700d9c197f"
+    }
+  ]
+}
+
+"temp": [
+    {
+      "product": {
+        "product_id": "b8073e3c-0407-433c-8967-d3c6e5b4d197",
+        "product_name": "Retro high",
+        "product_description": "Retro high",
+        "get_absolute_url": "/puma/retro-high/",
+        "brand": {
+          "brand_id": "8c360530-23ef-4dbf-aac1-bb7e4994a6fb",
+          "brand_name": "Puma",
+          "brand_image": "/media/brands/puma/PUMA_LOGO.png",
+          "slug": "puma",
+          "get_absolute_url": "/puma/"
+        }
+      },
+      "product_variant_id": "2fff9ddd-1c5a-4c95-9dc7-35700d9c197f",
+      "color_name": "Black",
+      "price": 4000,
+      "image": "/media/products/retro-high/PUMA_RETRO_BLACK.png",
+      "size_stock": {
+        "6": 22,
+        "7": 222,
+        "8": 10,
+        "9": 12,
+        "10": 1,
+        "11": 200
+      },
+      "get_absolute_url": "/retro-high/Black/2fff9ddd-1c5a-4c95-9dc7-35700d9c197f"
+    }
+  ],
