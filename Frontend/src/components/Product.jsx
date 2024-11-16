@@ -2,25 +2,31 @@
 import React, { useState } from "react";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdOutlineFavorite } from "react-icons/md";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { selectedProduct } from "../containers/Products/productSlice";
 
 const Product = ({ product }) => {
   const [favClick, setFavClick] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const toggleClick = (e) => {
     e.stopPropagation();
     setFavClick(!favClick);
   };
-  console.log(product);
+  const handleProductClick = () => {
+    navigate(
+      `/products/${(product.product.product_name).toLowerCase()}/${product.product.product_id}`,
+    );
+    dispatch(selectedProduct(product));
+  }
   return (
     <>
       <div style={{ cursor: "pointer" }} className="relative">
         <div
-          onClick={() =>
-            navigate(`/products${product.product.get_absolute_url}`)
-          }
+          onClick={() => handleProductClick()}
           className="flex h-32 w-full items-center justify-center rounded-3xl border-4 border-orange-500 bg-white lg:h-2/3 lg:w-64"
-        >
+          >
           <img
             src={`http://localhost:8000/${product.variants[0].image}`}
             alt=""
