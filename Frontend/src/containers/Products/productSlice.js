@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage/session";
+
 import {
   handleAddProducts,
   handleClearProducts,
@@ -30,4 +33,18 @@ const productSlice = createSlice({
 export const { addProducts, clearProducts, loadingHandler, errorHandler, selectedProduct} =
   productSlice.actions;
 
-export const productsReducer = productSlice.reducer;
+
+const persistConfig = {
+  key: "product",
+  storage,
+  whitelist: ["selected_product"],
+};
+
+const persistedProductsReducer = persistReducer(
+  persistConfig,
+  productSlice.reducer,
+);
+
+export const productsReducer = persistedProductsReducer;
+
+

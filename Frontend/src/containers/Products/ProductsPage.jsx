@@ -1,21 +1,11 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Nav from "../../components/Nav";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Footer from "../../components/Footer";
-import { useParams } from "react-router-dom";
-import { addProducts } from "./productSlice";
 
 const ProductsPage = () => {
   const { selected_product } = useSelector((state) => state.product);
-  const { productId } = useParams();
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (!selected_product || selected_product.id !== productId) {
-      dispatch(addProducts(productId));
-    }
-  }, [productId, selected_product, dispatch]);
-  
+
   const [product_variant, setProduct_variant] = useState(
     selected_product.variants[0],
   );
