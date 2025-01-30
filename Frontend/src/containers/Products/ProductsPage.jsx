@@ -2,16 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Nav from "../../components/Nav";
 import {  useState } from "react";
 import Footer from "../../components/Footer";
-import { addCart } from "../Cart/cartSlice";
+import { STATIC_URL } from "../../utils/config";
+import { handleAddCart } from "../Cart/cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProductsPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch()
   const { selected_product } = useSelector((state) => state.products);
-
-  console.log(
-    "dasdasd",
-    useSelector((state) => state.product),
-  );
   
   const { cart } = useSelector((state) => state.cart);
   const [product_variant, setProduct_variant] = useState(
@@ -37,13 +35,14 @@ const ProductsPage = () => {
     setSelectedSize(size);
   }
 
-  const handleBuy = () =>{
-    const cartObject = {
-      variant: product_variant,
-      size: selectedSize,
-    };
-    dispatch(addCart(cartObject))    
-  }
+ const handleBuy = (e) => {
+   e.target.textContent === "Cart"
+     ? navigate("/cart")
+     : dispatch(
+         handleAddCart({ ...product_variant, quantity: 1, size: selectedSize }),
+       );
+ };
+
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -52,7 +51,7 @@ const ProductsPage = () => {
         <div className="flex gap-12 pl-10">
           <div className="w-1/3">
             <img
-              src={`http://localhost:8000/${product_variant.image}`}
+              src={STATIC_URL(product_variant.image)}
               alt=""
               className="h-72"
             />
@@ -93,7 +92,7 @@ const ProductsPage = () => {
                       }
                     >
                       <img
-                        src={`http://localhost:8000/${variant.image}`}
+                        src={STATIC_URL(variant.image)}
                         alt=""
                         className=""
                       />
@@ -102,7 +101,7 @@ const ProductsPage = () => {
                 </div>
                 <button
                   className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
-                  onClick={() => handleBuy()}
+                  onClick={(e) => handleBuy(e)}
                 >
                   {cart.find(
                     (i) =>
@@ -110,8 +109,8 @@ const ProductsPage = () => {
                         product_variant.product_variant_id &&
                       i.product_id == selected_product.product_id,
                   )
-                    ? "In Cart"
-                    : "BUY NOW"}
+                    ? "Cart"
+                    : "Add to Cart"}
                 </button>
               </div>
               <div className="w-1/2">

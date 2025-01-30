@@ -5,6 +5,7 @@ import { MdOutlineFavorite } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectedProduct } from "../containers/Products/productSlice";
+import { STATIC_URL } from "../utils/config";
 
 const Product = ({ product }) => {
   const [favClick, setFavClick] = useState(false);
@@ -28,7 +29,7 @@ const Product = ({ product }) => {
           className="flex h-32 w-full items-center justify-center rounded-3xl border-4 border-orange-500 bg-white lg:h-2/3 lg:w-64"
           >
           <img
-            src={`http://localhost:8000/${product.variants[0].image}`}
+            src={STATIC_URL(product.variants[0].image)}
             alt=""
             className="p-7"
           />
