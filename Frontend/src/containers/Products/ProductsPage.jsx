@@ -1,11 +1,19 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Nav from "../../components/Nav";
 import {  useState } from "react";
 import Footer from "../../components/Footer";
+import { addCart } from "../Cart/cartSlice";
 
 const ProductsPage = () => {
-  const { selected_product } = useSelector((state) => state.product);
+  const dispatch = useDispatch()
+  const { selected_product } = useSelector((state) => state.products);
 
+  console.log(
+    "dasdasd",
+    useSelector((state) => state.product),
+  );
+  
+  const { cart } = useSelector((state) => state.cart);
   const [product_variant, setProduct_variant] = useState(
     selected_product.variants[0],
   );
@@ -14,6 +22,7 @@ const ProductsPage = () => {
   const initialSize = Object.entries(product_variant.size_stock).find(
     ([size, stock]) => stock != 0,
   );
+
   const [selectedSize, setSelectedSize] = useState(
     initialSize ? initialSize[0] : null,
   );
@@ -26,6 +35,14 @@ const ProductsPage = () => {
   
   const handleSize = (size) => {
     setSelectedSize(size);
+  }
+
+  const handleBuy = () =>{
+    const cartObject = {
+      variant: product_variant,
+      size: selectedSize,
+    };
+    dispatch(addCart(cartObject))    
   }
 
   return (
@@ -83,8 +100,18 @@ const ProductsPage = () => {
                     </div>
                   ))}
                 </div>
-                <button className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white">
-                  BUY NOW
+                <button
+                  className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
+                  onClick={() => handleBuy()}
+                >
+                  {cart.find(
+                    (i) =>
+                      i.product_variant_id ==
+                        product_variant.product_variant_id &&
+                      i.product_id == selected_product.product_id,
+                  )
+                    ? "In Cart"
+                    : "BUY NOW"}
                 </button>
               </div>
               <div className="w-1/2">

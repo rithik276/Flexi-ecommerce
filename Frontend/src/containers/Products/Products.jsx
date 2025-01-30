@@ -1,40 +1,17 @@
 import React, { useEffect } from "react";
 import Nav from "../../components/Nav";
 import Product from "../../components/Product";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addProducts, clearProducts, loadingHandler, errorHandler } from "./productSlice";
-import { TOKEN } from "./../../utils/constants";
+import { fetchProducts } from "./productSlice";
+
 
 const Products = () => {
   const dispatch = useDispatch();
-  const { products, isLoading, isError, error_msg } = useSelector(
-    (state) => state.product,
-  );
+  const { products, isLoading, isError, error_msg } = useSelector((state) => state.products);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      dispatch(loadingHandler(true));
-      try {
-        const response = await axios({
-          url: "http://localhost:8000/api/v1/get_products/",
-          method: "GET",
-          headers: {
-            authorization: "Bearer " + TOKEN,
-          },
-        });
-        const productsArray = Object.values(response.data);
-        dispatch(clearProducts());
-        dispatch(addProducts({ products: productsArray }));
-        dispatch(loadingHandler(false));
-      } catch (error) {
-        console.error("Error fetching products:", error.message);
-        dispatch(loadingHandler(false));
-        dispatch(errorHandler({ error: true, error_msg: error.message }));
-      }
-    };
-    fetchProducts();
-  }, [dispatch]);
+   useEffect(() => {
+     dispatch(fetchProducts());
+   }, [dispatch]);
 
   return (
     <div>
@@ -52,7 +29,7 @@ const Products = () => {
                   <div className="text-lg uppercase">Sort</div>
                   <div className="text-lg uppercase">Filter</div>
                 </div>
-                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4 lg:gap-24">
+                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4 lg:gap-24"> 
                   {products.map((elem, index) => (
                     <Product key={index} product={elem} />
                   ))}

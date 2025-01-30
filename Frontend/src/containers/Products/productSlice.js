@@ -1,14 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage/session";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import {API_ENDPOINTS} from './constants'
+import {URL} from '../../utils/config'
+import {header} from '../../utils/config'
+import axios from "axios";
 
-import {
-  handleAddProducts,
-  handleClearProducts,
-  handleError,
-  handleLoading,
-  handleSelectedProduct,
-} from "./productReducer";
 
 const initialState = {
   products: [],
@@ -18,33 +13,52 @@ const initialState = {
   selected_product: [],
 };
 
+export const fetchProducts = createAsyncThunk(
+  'products/fetchProducts',
+  async (_,{rejectwithValue}) => {
+    try{
+      const response = await axios({ 
+        url: URL(API_ENDPOINTS.FETCH_PRODUCTS),
+        method: "GET",
+        headers: header
+      })
+      const productsArray = Object.values(response.data);
+      return productsArray
+    } catch(err){
+      return rejectwithValue(err.response.data)
+    }
+  }
+
+)
 const productSlice = createSlice({
-  name: "product",
+  name: "products",
   initialState,
   reducers: {
-    addProducts: handleAddProducts,
-    clearProducts: handleClearProducts,
-    loadingHandler: handleLoading,
-    errorHandler: handleError,
-    selectedProduct: handleSelectedProduct,
+    selectedProduct : (state,action) => {
+      state.selected_product = action.payload
+    }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.isLoading = true;
+        state.isError = null;
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.products = action.payload;
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.isError = true;
+        state.error_msg =
+          action.payload?.message ||
+          "Failed to fetch products please try again later";
+      });
   },
 });
 
-export const { addProducts, clearProducts, loadingHandler, errorHandler, selectedProduct} =
-  productSlice.actions;
+export const {selectedProduct} = productSlice.actions
+export default productSlice.reducer;
 
-
-const persistConfig = {
-  key: "product",
-  storage,
-  whitelist: ["selected_product"],
-};
-
-const persistedProductsReducer = persistReducer(
-  persistConfig,
-  productSlice.reducer,
-);
-
-export const productsReducer = persistedProductsReducer;
 
 
