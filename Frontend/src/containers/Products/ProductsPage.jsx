@@ -1,49 +1,91 @@
 import { useDispatch, useSelector } from "react-redux";
 import Nav from "../../components/Nav";
-import {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import { STATIC_URL } from "../../utils/config";
-import { handleAddCart } from "../Cart/cartSlice";
-import { useNavigate } from "react-router-dom";
+import { addCart } from "../Cart/cartSlice";
+import { useNavigate, useParams } from "react-router-dom";
+import { selectedProduct } from "./productSlice";
 
 const ProductsPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-  const { selected_product } = useSelector((state) => state.products);
-  
-  const { cart } = useSelector((state) => state.cart);
-  const [product_variant, setProduct_variant] = useState(
-    selected_product.variants[0],
+  const dispatch = useDispatch();
+  const { product_name, product_id } = useParams();
+  const { selected_product, isLoading: product_loading } = useSelector(
+    (state) => state.products,
   );
+  const [product_variant, setProduct_variant] = useState(null);
+  const [selectedSize, setSelectedSize] = useState(null);
 
-  
-  const initialSize = Object.entries(product_variant.size_stock).find(
-    ([size, stock]) => stock != 0,
-  );
+  useEffect(() => {
+    const fetchData = async () => {
+      if (product_id) {
+        await dispatch(selectedProduct({ product_id: product_id }));
+      }
+    };
 
-  const [selectedSize, setSelectedSize] = useState(
-    initialSize ? initialSize[0] : null,
-  );
+    fetchData();
+  }, [dispatch, product_id]);
+
+  useEffect(() => {
+    const setProductVariant = async () => {
+      if (selected_product?.variants?.length > 0) {
+        await setProduct_variant(selected_product.variants[0]);
+      }
+    };
+    setProductVariant();
+  }, [selected_product]);
+
+  useEffect(() => {
+    if (product_variant?.size_stock) {
+      const firstValidSize = Object.entries(product_variant.size_stock).find(
+        ([key, value]) => value > 0,
+      )?.[0];
+      setSelectedSize(firstValidSize);
+    }
+  }, [product_variant]);
 
   const handleSelectProduct = (id) => {
     setProduct_variant(
       selected_product.variants.find((p) => p.product_variant_id == id),
     );
   };
-  
+
   const handleSize = (size) => {
     setSelectedSize(size);
+  };
+
+  const handleBuy = async (e) => {
+    if (e.target.textContent === "In Cart") {
+      navigate("/cart");
+    } else {
+      const payload = [
+        {
+          product_id: product_variant.product.product_id,
+          product_variant_id: product_variant.product_variant_id,
+          quantity: 1,
+          size: selectedSize,
+        },
+      ];
+      await dispatch(addCart(payload));
+      await dispatch(selectedProduct({product_id}))
+    }
+  };
+
+  // return (
+  //   <div>
+  //     <div>Product ID: {product_id}</div>
+  //     <div>Selected Product: {JSON.stringify(product_variant)}</div>
+  //   </div>
+  // );
+
+  if (product_loading && !selectedProduct && !product_variant) {
+    return (
+      <div>
+        <h1>loading...</h1>
+      </div>
+    );
   }
-
- const handleBuy = (e) => {
-   e.target.textContent === "Cart"
-     ? navigate("/cart")
-     : dispatch(
-         handleAddCart({ ...product_variant, quantity: 1, size: selectedSize }),
-       );
- };
-
-
   return (
     <div className="flex min-h-screen flex-col">
       <Nav />
@@ -58,17 +100,16 @@ const ProductsPage = () => {
           </div>
           <div className="w-2/3">
             <h1 className="text-5xl font-medium text-white">
-              {selected_product.product.product_name}
+              {selected_product.product_name}
             </h1>
             <h3 className="mt-2 text-3xl font-bold tracking-normal text-white">
               Rs. {product_variant.price}
             </h3>
             <div className="mt-3 w-1/2 border-b-2 border-white"></div>
             <p className="mt-3 w-1/2 text-base font-light tracking-normal text-white">
-              {selected_product.product.product_description.length > 200
-                ? selected_product.product.product_description.slice(0, 200) +
-                  "..."
-                : selected_product.product.product_description}
+              {selected_product.product_description.length > 200
+                ? selected_product.product_description.slice(0, 200) + "..."
+                : selected_product.product_description}
             </p>
             <div className="mt-3 flex w-full">
               <div className="w-1/3">
@@ -103,14 +144,7 @@ const ProductsPage = () => {
                   className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
                   onClick={(e) => handleBuy(e)}
                 >
-                  {cart.find(
-                    (i) =>
-                      i.product_variant_id ==
-                        product_variant.product_variant_id &&
-                      i.product_id == selected_product.product_id,
-                  )
-                    ? "Cart"
-                    : "Add to Cart"}
+                  {product_variant.cart ? "In Cart" : "Add to Cart"}
                 </button>
               </div>
               <div className="w-1/2">
@@ -155,7 +189,6 @@ const ProductsPage = () => {
       </footer>
     </div>
   );
-
 };
 
 export default ProductsPage;
