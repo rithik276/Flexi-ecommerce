@@ -65,13 +65,3 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ["order_id","user","cart","paid_amount","shipping_address","phone","created_at"]
 
-
-
-class CartDataSerializer(serializers.ModelSerializer):
-    size = serializers.IntegerField()
-    quantity = serializers.IntegerField()
-
-    class Meta:
-        model = CartProduct
-        fields = [
-             'size', 'quantity']

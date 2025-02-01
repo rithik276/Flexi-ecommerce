@@ -31,10 +31,12 @@ class SelectedProductView(APIView):
             # Serialize the data
             products_data = ProductSerializer(product, many=True).data
             for variant in products_data[0]['variants']:
+                size_stock = variant['size_stock']
+                variant['size_stock'] = sorted(size_stock)
                 if variant['cart']:
-                    variant['cart'] = True
+                    variant['cart'] =[ item["size"] for item in variant['cart']]
                 else:
-                    variant['cart'] = False
+                    variant['cart'] = []
             return Response(products_data)
         
         except ProductVariant.DoesNotExist:

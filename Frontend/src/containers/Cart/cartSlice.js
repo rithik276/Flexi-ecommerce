@@ -46,7 +46,7 @@ export const getCart = createAsyncThunk(
         method: "GET",
         headers: header,
       });
-      return response.data[0];
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

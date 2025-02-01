@@ -23,22 +23,13 @@ const ProductsPage = () => {
         await dispatch(selectedProduct({ product_id: product_id }));
       }
     };
-
     fetchData();
   }, [dispatch, product_id]);
 
   useEffect(() => {
     const setProductVariant = async () => {
       if (selected_product?.variants?.length > 0) {
-        let product = selected_product?.variants[0];
-        const sortedSizeStock = [...product.size_stock].sort(
-          (a, b) => a- b,
-        );
-        
-        setProduct_variant({
-          ...product,
-          size_stock: sortedSizeStock,
-        });
+        setProduct_variant(selected_product?.variants[0]);
       }
     };
 
@@ -68,7 +59,7 @@ const ProductsPage = () => {
     } else {
       const payload = [
         {
-          product_id: product_variant.product.product_id,
+          product_id: product_id,
           product_variant_id: product_variant.product_variant_id,
           quantity: 1,
           size: selectedSize,
@@ -146,7 +137,7 @@ const ProductsPage = () => {
                   className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
                   onClick={(e) => handleBuy(e)}
                 >
-                  {product_variant.cart ? "In Cart" : "Add to Cart"}
+                  {product_variant.cart.indexOf(selectedSize)>=0 ? "In Cart" : "Add to Cart"}
                 </button>
               </div>
               <div className="w-1/2">
@@ -155,25 +146,22 @@ const ProductsPage = () => {
                   style={{ cursor: "pointer" }}
                   className="relative mt-3 flex gap-2"
                 >
-                  {product_variant.size_stock
-                    .map((size) => (
-                      <button
-                        className={`relative flex h-12 w-12 items-center justify-center rounded-3xl text-xl font-bold ${
-                          selectedSize == size
-                            ? "bg-orange-600"
-                            : "bg-white"
-                        } `}
-                        key={size}
-                        onClick={() => handleSize(size)}
-                      >
-                        {size}
+                  {product_variant.size_stock.map((size) => (
+                    <button
+                      className={`relative flex h-12 w-12 items-center justify-center rounded-3xl text-xl font-bold ${
+                        selectedSize == size ? "bg-orange-600" : "bg-white"
+                      } `}
+                      key={size}
+                      onClick={() => handleSize(size)}
+                    >
+                      {size}
 
-                        {/* Diagonal Strikethrough */}
-                        {/* {stock == 0 && (
+                      {/* Diagonal Strikethrough */}
+                      {/* {stock == 0 && (
                           <span className="border-t-1 absolute bottom-4 right-4 h-full w-full rotate-45 transform border-r-2 border-gray-700"></span>
                         )} */}
-                      </button>
-                    ))}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

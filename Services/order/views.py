@@ -14,8 +14,10 @@ class CartView(APIView):
         user=request.user
         if user.is_authenticated:
             carts=Cart.objects.filter(user=user)
-            serializer=CartSerializer(carts,many=True)
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            serializer=CartSerializer(carts,many=True).data[0]
+            for product in serializer['products']:
+                product['size_stock'] = [{size:stock} for size,stock in product['size_stock'].items() if stock > 0]
+            return Response(serializer,status=status.HTTP_200_OK)
         else:
             return Response({"message":"Please Login First"},status=status.HTTP_400_BAD_REQUEST)
         

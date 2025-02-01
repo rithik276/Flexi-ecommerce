@@ -31,12 +31,10 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class CartDataSerializer(serializers.ModelSerializer):
     size = serializers.IntegerField()
-    quantity = serializers.IntegerField()
-
     class Meta:
         model = CartProduct
         fields = [
-             'size', 'quantity']
+             'size']
         
 class ProductVariantSerializer(serializers.ModelSerializer):
     product_variant_id = serializers.UUIDField(source = 'uid')
