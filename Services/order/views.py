@@ -64,11 +64,11 @@ class AddUpdateCartView(CartView):
 
                 if quantity == 0:
                     # If quantity is 0, delete the product from the cart if it exists
-                    cart_product = CartProduct.objects.filter(cart=cart, product=product, product_variant = product_variant).first()
+                    cart_product = CartProduct.objects.filter(cart=cart, product=product, product_variant = product_variant, size = size)
                     if cart_product:
                         #delete cart product
                         cart_product.delete()
-                        # return Response("Product deleted from the cart.", status=status.HTTP_204_NO_CONTENT)
+                        return Response("Product deleted from the cart.", status=status.HTTP_204_NO_CONTENT)
                     else:
                         return Response("Product not found in the cart.", status=status.HTTP_404_NOT_FOUND)
 
