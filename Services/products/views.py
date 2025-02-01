@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import ProductVariant,Product,Brand
-from .serializers import ProductVariantSerializer,BrandSerializer,ProductSerializer,ProductSearchSerializer
+from .serializers import ProductVariantSerializer,BrandSerializer,ProductSerializer,ProductSearchSerializer,ProductListSerializer
 from django.db.models import Q
 from rest_framework import status
 
@@ -12,22 +12,35 @@ class GetAllProductsView(APIView):
         product_variants = ProductVariant.objects.all()
 
         # Serialize the data
-        product_variants_data = ProductVariantSerializer(product_variants, many=True).data
+        products_data = ProductListSerializer(product_variants, many=True).data
 
         response_data = {}
-        for product_variant in product_variants_data:
-            product_id = product_variant['product']['product_id']
+        for product in products_data:
+            product_id = product['product_id']
 
             if product_id not in response_data:
-                response_data[product_id] = {
-                    'product': product_variant['product'],
-                    'variants': []
-                }
-            
-            response_data[product_id]['variants'].append(product_variant)
+                response_data[product_id] = product
+
+        return Response(response_data)
+    
+class SelectedProductView(APIView):
+    def get(self,request,product_id):
+        try:
+            product = Product.objects.filter(uid = product_id)
+
+            # Serialize the data
+            products_data = ProductSerializer(product, many=True).data
+            for variant in products_data[0]['variants']:
+                if variant['cart']:
+                    variant['cart'] = True
+                else:
+                    variant['cart'] = False
+            return Response(products_data)
+        
+        except ProductVariant.DoesNotExist:
+            return Response("Product doesn't exist")
 
         
-        return Response(response_data)
         
 
 class SearchProductView(APIView):
@@ -45,30 +58,30 @@ class SearchProductView(APIView):
             return Response({"products": [],"msg":'Error Occured'},status=status.HTTP_417_EXPECTATION_FAILED)
         
 
-class GetProductsView(APIView):
-    def get(self, request, product_id):
+# class GetProductsView(APIView):
+#     def get(self, request, product_id):
         
-        # Retrieve all variants for the specified product UID
-        product_variants = ProductVariant.objects.filter(product_id=product_id)
+#         # Retrieve all variants for the specified product UID
+#         product_variants = ProductVariant.objects.filter(product_id=product_id)
         
-        # Serialize the data
-        product_variants_data = ProductVariantSerializer(product_variants, many=True).data
-        if not product_variants_data:
-            return Response({"products": {},"msg":'Data not found'},status=status.HTTP_404_NOT_FOUND)
+#         # Serialize the data
+#         product_variants_data = ProductVariantSerializer(product_variants, many=True).data
+#         if not product_variants_data:
+#             return Response({"products": {},"msg":'Data not found'},status=status.HTTP_404_NOT_FOUND)
         
-        response_data = {}
-        for product_variant in product_variants_data:
-            if product_variant['product']['product_id'] not in response_data:
-                response_data[product_variant['product']['product_id']] = {
-                    'product': product_variant['product'],
-                    'variants': []
-                }
-            response_data[product_variant['product']['product_id']]['variants'].append(product_variant)
+#         response_data = {}
+#         for product_variant in product_variants_data:
+#             if product_variant['product']['product_id'] not in response_data:
+#                 response_data[product_variant['product']['product_id']] = {
+#                     'product': product_variant['product'],
+#                     'variants': []
+#                 }
+#             response_data[product_variant['product']['product_id']]['variants'].append(product_variant)
 
-        if not response_data:
-            return Response({"products": {},"msg":'Error while parsing data'},status=status.HTTP_417_EXPECTATION_FAILED)
+#         if not response_data:
+#             return Response({"products": {},"msg":'Error while parsing data'},status=status.HTTP_417_EXPECTATION_FAILED)
 
-        return Response(response_data)
+        # return Response(response_data)
     
 
 

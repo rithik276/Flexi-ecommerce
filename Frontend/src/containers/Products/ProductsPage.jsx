@@ -30,18 +30,25 @@ const ProductsPage = () => {
   useEffect(() => {
     const setProductVariant = async () => {
       if (selected_product?.variants?.length > 0) {
-        await setProduct_variant(selected_product.variants[0]);
+        let product = selected_product?.variants[0];
+        const sortedSizeStock = [...product.size_stock].sort(
+          (a, b) => a- b,
+        );
+        
+        setProduct_variant({
+          ...product,
+          size_stock: sortedSizeStock,
+        });
       }
     };
+
     setProductVariant();
   }, [selected_product]);
 
+
   useEffect(() => {
     if (product_variant?.size_stock) {
-      const firstValidSize = Object.entries(product_variant.size_stock).find(
-        ([key, value]) => value > 0,
-      )?.[0];
-      setSelectedSize(firstValidSize);
+      setSelectedSize(product_variant.size_stock[0]);
     }
   }, [product_variant]);
 
@@ -68,24 +75,19 @@ const ProductsPage = () => {
         },
       ];
       await dispatch(addCart(payload));
-      await dispatch(selectedProduct({product_id}))
+      await dispatch(selectedProduct({ product_id }));
     }
   };
 
-  // return (
-  //   <div>
-  //     <div>Product ID: {product_id}</div>
-  //     <div>Selected Product: {JSON.stringify(product_variant)}</div>
-  //   </div>
-  // );
-
-  if (product_loading && !selectedProduct && !product_variant) {
+  // Only show loading when the product is being fetched
+  if (product_loading || !product_variant) {
     return (
       <div>
         <h1>loading...</h1>
       </div>
     );
   }
+
   return (
     <div className="flex min-h-screen flex-col">
       <Nav />
@@ -153,31 +155,25 @@ const ProductsPage = () => {
                   style={{ cursor: "pointer" }}
                   className="relative mt-3 flex gap-2"
                 >
-                  {Object.entries(product_variant.size_stock).map(
-                    ([size, stock]) => (
+                  {product_variant.size_stock
+                    .map((size) => (
                       <button
                         className={`relative flex h-12 w-12 items-center justify-center rounded-3xl text-xl font-bold ${
-                          selectedSize == size && "bg-orange-600"
-                        } ${
-                          stock == 0
-                            ? "cursor-not-allowed bg-gray-400 opacity-40"
-                            : selectedSize != size
-                              ? "bg-white"
-                              : ""
-                        }`}
+                          selectedSize == size
+                            ? "bg-orange-600"
+                            : "bg-white"
+                        } `}
                         key={size}
                         onClick={() => handleSize(size)}
-                        disabled={stock == 0}
                       >
                         {size}
 
                         {/* Diagonal Strikethrough */}
-                        {stock == 0 && (
+                        {/* {stock == 0 && (
                           <span className="border-t-1 absolute bottom-4 right-4 h-full w-full rotate-45 transform border-r-2 border-gray-700"></span>
-                        )}
+                        )} */}
                       </button>
-                    ),
-                  )}
+                    ))}
                 </div>
               </div>
             </div>

@@ -15,11 +15,12 @@ const Product = ({ product }) => {
     e.stopPropagation();
     setFavClick(!favClick);
   };
-  const handleProductClick = () => {
+  const handleProductClick = async () => {
+    // await dispatch(selectedProduct({"product_id":product.product_id}));
     navigate(
-      `/products/${(product.product.product_name).toLowerCase()}/${product.product.product_id}`,
+      `/products/${(product.product_name).toLowerCase()}/${product.product_id}`,
     );
-    dispatch(selectedProduct(product));
+    
   }
   return (
     <>
@@ -29,7 +30,7 @@ const Product = ({ product }) => {
           className="flex h-32 w-full items-center justify-center rounded-3xl border-4 border-orange-500 bg-white lg:h-2/3 lg:w-64"
           >
           <img
-            src={STATIC_URL(product.variants[0].image)}
+            src={STATIC_URL(product.image)}
             alt=""
             className="p-7"
           />
@@ -53,10 +54,10 @@ const Product = ({ product }) => {
         </div>
         <div className="mt-3 text-center text-white">
           <h3 className=" text-sm font-semibold lg:text-2xl">
-            {product.product.product_name}
+            {product.product_name}
           </h3>
           <h5 className="text-sm font-bold lg:text-lg">
-            Rs.{product.variants[0].price}
+            Rs.{product.price}
           </h5>
         </div>
       </div>

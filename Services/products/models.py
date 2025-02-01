@@ -59,7 +59,7 @@ def default_size_dict():
     return {'6':0,'7':0,'8':0,'9':0,'10':0,'11':0,'12':0,'13':0,}
 
 class ProductVariant(BaseModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="color_variants")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     color_name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to=image_upload_path,blank=True,null=True)

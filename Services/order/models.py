@@ -1,6 +1,6 @@
 from django.db import models
 from base.models import BaseModel
-from products.models import Product
+from products.models import Product,ProductVariant
 from accounts.models import User
 
 
@@ -27,9 +27,11 @@ class CartProduct(BaseModel):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+    product_variant = models.ForeignKey(ProductVariant,on_delete=models.CASCADE)
+    size = models.IntegerField()
     class Meta:
         db_table = 'cart_product'
-        unique_together = ('product',)
+        unique_together = ('product','cart','product_variant')
         ordering = ('-created_at',)
 
 

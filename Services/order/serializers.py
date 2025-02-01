@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Cart,Favorite,CartProduct,Order
-from products.serializers import ProductSerializer
+from products.serializers import ProductSerializer,ProductVariantSerializer
 from accounts.models import User
 
 
@@ -9,9 +9,30 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id','email','name']
 
+class CartProductSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='product_variant.product.product_name')
+    price = serializers.DecimalField(source='product_variant.price', max_digits=10, decimal_places=2)
+    color_name = serializers.CharField(source='product_variant.color_name')
+    size = serializers.IntegerField()
+    quantity = serializers.IntegerField()
+    image = serializers.CharField(source='product_variant.image')
+    product_variant_id = serializers.UUIDField(source ='product_variant.uid')
+    product_variant_url = serializers.CharField(source='product_variant.get_absolute_url')
+    product_id = serializers.CharField(source='product_variant.product.uid')
+    size_stock = serializers.JSONField(source = 'product_variant.size_stock')
+
+    class Meta:
+        model = CartProduct
+        fields = [
+            'product_variant_id', 'product_name', 'price', 
+            'color_name', 'size', 'quantity', 'image', 
+            'product_variant_url','size_stock','product_id'
+        ]
+
+
 class CartSerializer(serializers.ModelSerializer):
     cart_id = serializers.UUIDField(source ='uid')
-    products = ProductSerializer(many=True)
+    products = CartProductSerializer(source = 'cartproduct_set',many=True)
     user = UserSerializer()
     class Meta:
         model = Cart
@@ -46,3 +67,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 
+class CartDataSerializer(serializers.ModelSerializer):
+    size = serializers.IntegerField()
+    quantity = serializers.IntegerField()
+
+    class Meta:
+        model = CartProduct
+        fields = [
+             'size', 'quantity']

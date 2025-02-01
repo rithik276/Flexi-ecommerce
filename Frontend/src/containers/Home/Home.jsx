@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import flexi_logo from "../../assets/images/LOGOS/flexi_logo.png";
 import home_shoe from "../../assets/images/HomePage/home_jordan.png";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,12 +9,19 @@ import XIcon from "@mui/icons-material/X";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getCart } from "../Cart/cartSlice";
 
 const Home = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch()
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
+
+  useEffect(()=>{
+    dispatch(getCart())
+  })
   return (
     <>
       <div className="bg-bg h-screen w-screen overflow-x-hidden">

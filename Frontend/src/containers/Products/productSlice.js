@@ -14,7 +14,7 @@ const initialState = {
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
-  async (_, { rejectwithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axios({
         url: URL(API_ENDPOINTS.FETCH_PRODUCTS),
@@ -24,14 +24,14 @@ export const fetchProducts = createAsyncThunk(
       const productsArray = Object.values(response.data);
       return productsArray;
     } catch (err) {
-      return rejectwithValue(err.response.data);
+      return rejectWithValue(err.response.data);
     }
   },
 );
 
 export const selectedProduct = createAsyncThunk(
   "products/selectedProduct",
-  async ({product_id}, { rejectwithValue }) => {
+  async ({ product_id }, { rejectWithValue }) => {
     try {
       const response = await axios({
         url: `${URL(API_ENDPOINTS.SELECTED_PRODUCT)}${product_id}/`,
@@ -40,7 +40,7 @@ export const selectedProduct = createAsyncThunk(
       });
       return response.data[0];
     } catch (err) {
-      return rejectwithValue(err.response.data);
+      return rejectWithValue(err.response.data);
     }
   },
 );
@@ -53,34 +53,35 @@ const productSlice = createSlice({
     builder
       .addCase(fetchProducts.pending, (state) => {
         state.isLoading = true;
-        state.isError = null;
+        state.isError = false;
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.products = action.payload;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.error_msg =
           action.payload?.message ||
-          "Failed to fetch products please try again later";
+          "Failed to fetch products, please try again later";
       })
       .addCase(selectedProduct.pending, (state) => {
         state.isLoading = true;
-        state.isError = null;
+        state.isError = false;
       })
       .addCase(selectedProduct.fulfilled, (state, action) => {
         state.isLoading = false;
         state.selected_product = action.payload;
       })
       .addCase(selectedProduct.rejected, (state, action) => {
+        state.isLoading = false;
         state.isError = true;
         state.error_msg =
           action.payload?.message ||
-          "Failed to fetch products please try again later";
+          "Failed to fetch the selected product, please try again later";
       });
   },
 });
 
-// export const {  } = productSlice.actions;
 export default productSlice.reducer;
