@@ -6,11 +6,12 @@ from accounts.models import User
 
 class Favorite(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_variant = models.ForeignKey(ProductVariant, on_delete= models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'favorites'
-        unique_together = ('product', 'user')
+        unique_together = ('user','product_variant')
         ordering = ('-created_at',)
 
 

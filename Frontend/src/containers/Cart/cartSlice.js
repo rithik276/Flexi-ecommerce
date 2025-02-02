@@ -80,8 +80,6 @@ const cartSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getCart.fulfilled, (state, action) => {
-      console.log("dsa", action.payload);
-
       state.isLoading = false;
       state.cart = action.payload;
     });

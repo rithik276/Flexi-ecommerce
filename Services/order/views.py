@@ -93,8 +93,11 @@ class FavoriteView(APIView):
         user=request.user
         if user.is_authenticated:
             carts=Favorite.objects.filter(user=user)
-            serializer=FavoriteSerializer(carts,many=True)
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            serializer=FavoriteSerializer(carts,many=True).data
+            for favorite in serializer:
+                favorite['size_stock'] = [int(size) for size,stock in favorite['size_stock'].items() if stock > 0]
+                
+            return Response(serializer,status=status.HTTP_200_OK)
         else:
             return Response({"message":"Please Login First"},status=status.HTTP_400_BAD_REQUEST)
         
@@ -105,9 +108,13 @@ class AddUpdateFavoriteView(CartView):
         data = request.data
         
         product_id = data.get('product_id')
+        product_variant_id = data.get('product_variant_id')
 
         if not product_id:
             return Response({"message": "product_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not product_variant_id:
+            return Response({"message": "product_variant_id is required"}, status=status.HTTP_400_BAD_REQUEST)
         
         if user.is_authenticated:
             try:
@@ -116,8 +123,13 @@ class AddUpdateFavoriteView(CartView):
                 return Response({"message": "Invalid product"}, status=status.HTTP_400_BAD_REQUEST)
             
             try:
+                product_variant = ProductVariant.objects.get(uid=product_variant_id,product = product_id)
+            except ProductVariant.DoesNotExist:
+                return Response({"message": "Invalid product"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            try:
                 # Check if the product is already in the user's favorites list
-                favorite_item = Favorite.objects.get(user=user, product=product)
+                favorite_item = Favorite.objects.get(user=user, product=product, product_variant = product_variant)
                 
                 # If the product is already in the cart, update the quantity
                 favorite_item.delete()
@@ -126,7 +138,7 @@ class AddUpdateFavoriteView(CartView):
             
             except Favorite.DoesNotExist:
                 # If the product is not in the cart, create a new cart item
-                favorite_item = Favorite.objects.create(user=user, product=product)
+                favorite_item = Favorite.objects.create(user=user, product=product, product_variant = product_variant)
                 
                 return Response({"message": "Favorite item added successfully"}, status=status.HTTP_200_OK)
 

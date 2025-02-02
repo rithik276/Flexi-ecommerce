@@ -5,22 +5,30 @@ import Footer from "../../components/Footer";
 import { STATIC_URL } from "../../utils/config";
 import { addCart } from "../Cart/cartSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { selectedProduct } from "./productSlice";
+import {
+  addFavoriteProduct,
+  fetchFavorites,
+  selectedProduct,
+} from "./productSlice";
 
 const ProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { product_name, product_id } = useParams();
-  const { selected_product, isLoading: product_loading } = useSelector(
-    (state) => state.products,
-  );
+  const {
+    selected_product,
+    favorites,
+    isLoading: product_loading,
+  } = useSelector((state) => state.products);
   const [product_variant, setProduct_variant] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       if (product_id) {
         await dispatch(selectedProduct({ product_id: product_id }));
+        await dispatch(fetchFavorites());
       }
     };
     fetchData();
@@ -32,16 +40,26 @@ const ProductsPage = () => {
         setProduct_variant(selected_product?.variants[0]);
       }
     };
-
     setProductVariant();
   }, [selected_product]);
-
 
   useEffect(() => {
     if (product_variant?.size_stock) {
       setSelectedSize(product_variant.size_stock[0]);
     }
   }, [product_variant]);
+
+  useEffect(() => {
+    if (product_variant && favorites) {
+      setIsFavorite(
+        favorites.some(
+          (i) =>
+            i.product_id == product_id &&
+            i.product_variant_id == product_variant.product_variant_id,
+        ),
+      );
+    }
+  }, [favorites, product_id, product_variant]);
 
   const handleSelectProduct = (id) => {
     setProduct_variant(
@@ -67,6 +85,17 @@ const ProductsPage = () => {
       ];
       await dispatch(addCart(payload));
       await dispatch(selectedProduct({ product_id }));
+    }
+  };
+  const handleFavorite = async (e) => {
+    if (e.target.textContent === "Add to Favorite") {
+      await dispatch(
+        addFavoriteProduct({
+          product_id: product_id,
+          product_variant_id: product_variant.product_variant_id,
+        }),
+      );
+      setIsFavorite(true);
     }
   };
 
@@ -104,8 +133,8 @@ const ProductsPage = () => {
                 ? selected_product.product_description.slice(0, 200) + "..."
                 : selected_product.product_description}
             </p>
-            <div className="mt-3 flex w-full">
-              <div className="w-1/3">
+            <div className="mt-3 flex w-full justify-between">
+              <div className="w-1/2">
                 <h1 className="text-2xl font-semibold text-white">
                   More Colors
                 </h1>
@@ -133,12 +162,24 @@ const ProductsPage = () => {
                     </div>
                   ))}
                 </div>
-                <button
-                  className="mt-10 h-1/3 w-2/3 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
-                  onClick={(e) => handleBuy(e)}
-                >
-                  {product_variant.cart.indexOf(selectedSize)>=0 ? "In Cart" : "Add to Cart"}
-                </button>
+                <div className="flex h-full gap-5">
+                  <button
+                    className="mt-10 h-1/4 w-1/2 rounded-2xl bg-orange-600 text-2xl font-semibold text-white"
+                    onClick={(e) => handleBuy(e)}
+                  >
+                    {product_variant.cart.indexOf(selectedSize) >= 0
+                      ? "In Cart"
+                      : "Add to Cart"}
+                  </button>
+                  <button
+                    className={`mt-10 h-1/4 w-1/2 rounded-2xl text-2xl font-semibold tracking-tighter text-white 
+                      ${isFavorite ? "cursor-not-allowed bg-gray-700 opacity-40" : "bg-orange-600"}`}
+                    onClick={(e) => handleFavorite(e)}
+                    disabled={isFavorite}
+                  >
+                    {isFavorite ? "Favorite" : "Add to Favorite"}
+                  </button>
+                </div>
               </div>
               <div className="w-1/2">
                 <h1 className="text-2xl font-semibold text-white">Size</h1>

@@ -41,11 +41,16 @@ class CartSerializer(serializers.ModelSerializer):
 
 class FavoriteSerializer(serializers.ModelSerializer):
     favorite_id = serializers.UUIDField(source ='uid')
-    product = ProductSerializer()
-    user = UserSerializer()
+    product_id = serializers.UUIDField(source = 'product.uid')
+    product_variant_id = serializers.UUIDField(source = 'product_variant.uid')
+    product_name = serializers.CharField(source = 'product.product_name')
+    price = serializers.CharField(source = 'product_variant.price')
+    image = serializers.CharField(source = 'product_variant.image')
+    size_stock = serializers.JSONField(source = 'product_variant.size_stock')
+    # user = UserSerializer()
     class Meta:
         model = Favorite
-        fields = ["favorite_id","created_at","product","user"]
+        fields = ["favorite_id","created_at","product_id","product_variant_id","product_name","price","image","size_stock"]
 
 
 

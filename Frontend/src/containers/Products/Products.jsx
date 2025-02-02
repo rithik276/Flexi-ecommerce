@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Nav from "../../components/Nav";
 import Product from "../../components/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "./productSlice";
+import { fetchFavorites, fetchProducts } from "./productSlice";
 
 
 const Products = () => {
@@ -11,6 +11,7 @@ const Products = () => {
 
    useEffect(() => {
      dispatch(fetchProducts());
+     dispatch(fetchFavorites())
    }, [dispatch]);
 
   return (

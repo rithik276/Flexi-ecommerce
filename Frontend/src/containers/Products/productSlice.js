@@ -10,6 +10,7 @@ const initialState = {
   isError: false,
   error_msg: "",
   selected_product: [],
+  favorites : []
 };
 
 export const fetchProducts = createAsyncThunk(
@@ -39,6 +40,40 @@ export const selectedProduct = createAsyncThunk(
         headers: header,
       });
       return response.data[0];
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const addFavoriteProduct = createAsyncThunk(
+  "products/addFavoriteProduct",
+  async ({ product_id,product_variant_id }, { dispatch,rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: URL(API_ENDPOINTS.ADD_FAVORITE_PRODUCT),
+        method: "POST",
+        data: { product_id, product_variant_id },
+        headers: header,
+      });
+      dispatch(fetchFavorites())
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  },
+);
+
+export const fetchFavorites = createAsyncThunk(
+  "products/fetchFavorites",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios({
+        url: URL(API_ENDPOINTS.FAVORITE_PRODUCTS),
+        method: "GET",
+        headers: header,
+      });
+      return response.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -80,6 +115,26 @@ const productSlice = createSlice({
         state.error_msg =
           action.payload?.message ||
           "Failed to fetch the selected product, please try again later";
+      })
+      .addCase(addFavoriteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error_msg = action.payload?.message;
+      })
+
+      .addCase(fetchFavorites.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+      })
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.favorites = action.payload
+      })
+      .addCase(fetchFavorites.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.error_msg =
+          action.payload?.message;
       });
   },
 });
