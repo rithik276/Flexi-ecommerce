@@ -7,18 +7,18 @@ import { getCart } from "./cartSlice";
 
 const Cart = () => {
   const { cart } = useSelector((state) => state.cart);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
       try {
         await dispatch(getCart());
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
-    }
-    fetchData()
-  },[dispatch]);
-  const checkout = () => {}
+    };
+    fetchData();
+  }, [dispatch]);
+  const checkout = () => {};
   return (
     <div className="flex min-h-screen flex-col">
       <Nav />
@@ -26,17 +26,26 @@ const Cart = () => {
         <div className="mx-24">
           <h1 className="text-2xl font-semibold text-white">My Cart</h1>
           <div className="mt-5">
-            {cart?.products?.map((item, idx) => (
-              <CartList item={item} key={idx} />
-            ))}
+            {cart?.products.length > 0 ? (
+              cart?.products?.map((item, idx) => (
+                <CartList item={item} key={idx} />
+              ))
+            ) : (
+              <div className="flex min-h-[30dvh] items-center justify-center text-3xl">
+                <h1 className="text-white">No items in cart</h1>
+              </div>
+            )}
           </div>
         </div>
       </div>
       <div
         className="flex items-center justify-center bg-bg"
         onClick={() => checkout()}
+        disabled={cart?.products.length < 0}
       >
-        <button className="mb-10 mt-10 h-12 w-52 rounded-2xl bg-orange-600 text-3xl font-semibold tracking-normal text-white">
+        <button
+          className={`mb-10 mt-10 h-12 w-52 rounded-2xl ${cart?.products.length > 0 ? "bg-orange-600" : "cursor-not-allowed bg-gray-700 opacity-40"}  text-3xl font-semibold tracking-normal text-white`}
+        >
           Checkout
         </button>
       </div>

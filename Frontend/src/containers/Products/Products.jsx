@@ -31,10 +31,16 @@ const Products = () => {
                   <div className="text-lg uppercase">Sort</div>
                   <div className="text-lg uppercase">Filter</div>
                 </div>
-                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4 lg:gap-24"> 
-                  {products.map((elem, index) => (
-                    <Product key={index} product={elem} />
-                  ))}
+                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 lg:grid-cols-4 lg:gap-24">
+                  {products.length > 0 ? (
+                    products.map((elem, index) => (
+                      <Product key={index} product={elem} />
+                    ))
+                  ) : (
+                    <div className="flex min-h-[30dvh] items-center justify-center text-3xl">
+                      <h1 className="text-white">No Products</h1>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
