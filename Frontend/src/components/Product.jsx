@@ -5,16 +5,17 @@ import { MdOutlineFavorite } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { STATIC_URL } from "../utils/config";
-import { addFavoriteProduct } from "../containers/Products/productSlice";
+import { addFavoriteProduct } from "../containers/Favorite/favoriteSlice";
 
 const Product = ({ product }) => {
-  const { favorites,isLoading: product_loading } = useSelector((state) => state.products);
+  const { isLoading: product_loading } = useSelector((state) => state.products);
+  const { favorites, isLoading: favorite_loading } = useSelector((state) => state.favorite);
   const [favClick, setFavClick] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    setFavClick(favorites.some((i) => i.product_id === product.product_id));
+    setFavClick(favorites.some((i) => i.product_id === product.product_id || i.product_variant_id == product.product_variant_id));
   }, [favorites, product.product_id]);
 
   const toggleClick = (e) => {
@@ -33,7 +34,7 @@ const Product = ({ product }) => {
       `/products/${product.product_name.toLowerCase()}/${product.product_id}`,
     );
   };
-  if (product_loading) {
+  if (product_loading && favorite_loading) {
     return (
       <div>
         <h1>loading...</h1>
@@ -68,9 +69,9 @@ const Product = ({ product }) => {
         </div>
         <div className="mt-3 text-center text-white">
           <h3 className=" text-sm font-semibold lg:text-2xl">
-            {product.product_name}
+            {product.brand_name + " " + product.product_name}
           </h3>
-          <h5 className="text-sm font-bold lg:text-lg">Rs.{product.price}</h5>
+          <h5 className="text-sm font-bold lg:text-lg">Rs. {product.price}</h5>
         </div>
       </div>
     </>

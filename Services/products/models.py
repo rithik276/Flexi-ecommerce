@@ -24,6 +24,9 @@ class Brand(BaseModel):
     def get_absolute_url(self):
         return f'/{self.slug}/'
     
+    def clean(self):
+        self.brand_name = self.brand_name.capitalize()
+    
     def __str__(self):
         return self.brand_name
 

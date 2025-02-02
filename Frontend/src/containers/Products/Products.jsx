@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import Nav from "../../components/Nav";
 import Product from "../../components/Product";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchFavorites, fetchProducts } from "./productSlice";
+import {  fetchProducts } from "./productSlice";
+import { fetchFavorites } from "../Favorite/favoriteSlice";
 
 
 const Products = () => {

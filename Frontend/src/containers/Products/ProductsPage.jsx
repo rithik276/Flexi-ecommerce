@@ -6,10 +6,9 @@ import { STATIC_URL } from "../../utils/config";
 import { addCart } from "../Cart/cartSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  addFavoriteProduct,
-  fetchFavorites,
   selectedProduct,
 } from "./productSlice";
+import { addFavoriteProduct,fetchFavorites } from "../Favorite/favoriteSlice";
 
 const ProductsPage = () => {
   const navigate = useNavigate();
@@ -17,9 +16,11 @@ const ProductsPage = () => {
   const { product_name, product_id } = useParams();
   const {
     selected_product,
-    favorites,
     isLoading: product_loading,
   } = useSelector((state) => state.products);
+  const {
+    favorites
+  } = useSelector((state) => state.favorite)
   const [product_variant, setProduct_variant] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -122,7 +123,9 @@ const ProductsPage = () => {
           </div>
           <div className="w-2/3">
             <h1 className="text-5xl font-medium text-white">
-              {selected_product.product_name}
+              {selected_product.brand_name +
+                " " +
+                selected_product.product_name}
             </h1>
             <h3 className="mt-2 text-3xl font-bold tracking-normal text-white">
               Rs. {product_variant.price}

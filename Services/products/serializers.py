@@ -24,9 +24,10 @@ class ProductListSerializer(serializers.ModelSerializer):
     product_variant_id = serializers.UUIDField(source = 'uid')
     product_id = serializers.UUIDField(source = 'product.uid')
     product_name = serializers.UUIDField(source = 'product.product_name')
+    brand_name = serializers.CharField(source = 'product.brand.brand_name')
     class Meta:
         model = ProductVariant
-        fields = ['product_id','product_name','product_variant_id','price','image']
+        fields = ['product_id','product_name','product_variant_id','brand_name','price','image']
 
 
 class CartDataSerializer(serializers.ModelSerializer):
@@ -51,7 +52,8 @@ class ProductVariantSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     # brand = BrandSerializer()
     product_id = serializers.UUIDField(source = 'uid')
+    brand_name = serializers.CharField(source = 'brand.brand_name')
     variants = ProductVariantSerializer(source = 'productvariant_set',many=True)
     class Meta:
         model = Product
-        fields  = ['product_id','product_name','product_description','get_absolute_url','variants']
+        fields  = ['product_id','product_name','brand_name','product_description','get_absolute_url','variants']
