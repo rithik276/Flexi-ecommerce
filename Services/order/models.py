@@ -40,8 +40,10 @@ class Order(BaseModel):
     user = models.ForeignKey(User, related_name='user_orders', on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, related_name='order_carts', on_delete=models.CASCADE)
     paid_amount = models.IntegerField(blank=True, null=True)
+    payment_id = models.CharField(max_length=100)
     shipping_address = models.CharField(max_length=255)
     phone = models.CharField(max_length=100)
+    is_paid = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'orders'

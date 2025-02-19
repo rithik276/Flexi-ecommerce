@@ -7,7 +7,7 @@ from accounts.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id','email','name']
+        fields = ['id','email','name','address','phone']
 
 class CartProductSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='product_variant.product.product_name')
@@ -33,10 +33,10 @@ class CartProductSerializer(serializers.ModelSerializer):
 class CartSerializer(serializers.ModelSerializer):
     cart_id = serializers.UUIDField(source ='uid')
     products = CartProductSerializer(source = 'cartproduct_set',many=True)
-    # user = UserSerializer()
+    user = UserSerializer()
     class Meta:
         model = Cart
-        fields = ["cart_id","products","created_at"]
+        fields = ["cart_id","products","user","created_at"]
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

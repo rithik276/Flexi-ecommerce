@@ -4,10 +4,12 @@ import Footer from "../../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import CartList from "./CartList";
 import { getCart } from "./cartSlice";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,7 +20,9 @@ const Cart = () => {
     };
     fetchData();
   }, [dispatch]);
-  const checkout = () => {};
+  const checkout = (e) => {
+    navigate("/checkout");
+  };
   return (
     <div className="flex min-h-screen flex-col">
       <Nav />
@@ -26,7 +30,7 @@ const Cart = () => {
         <div className="mx-24">
           <h1 className="text-2xl font-semibold text-white">My Cart</h1>
           <div className="mt-5">
-            {cart?.products.length > 0 ? (
+            {cart?.products?.length > 0 ? (
               cart?.products?.map((item, idx) => (
                 <CartList item={item} key={idx} />
               ))
@@ -40,11 +44,11 @@ const Cart = () => {
       </div>
       <div
         className="flex items-center justify-center bg-bg"
-        onClick={() => checkout()}
-        disabled={cart?.products.length < 0}
+        onClick={(e) => cart?.products?.length > 0 && checkout(e)}
       >
         <button
-          className={`mb-10 mt-10 h-12 w-52 rounded-2xl ${cart?.products.length > 0 ? "bg-orange-600" : "cursor-not-allowed bg-gray-700 opacity-40"}  text-3xl font-semibold tracking-normal text-white`}
+          disabled={cart?.products?.length < 0}
+          className={`mb-10 mt-10 h-12 w-52 rounded-2xl ${cart?.products?.length > 0 ? "bg-orange-600" : "cursor-not-allowed bg-gray-700 opacity-40"}  text-3xl font-semibold tracking-normal text-white`}
         >
           Checkout
         </button>

@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from products import views
-from .views import CartView,AddUpdateCartView,FavoriteView,AddUpdateFavoriteView,OrderView,CreateOrderView,DeleteOrderView
+from .views import CartView,AddUpdateCartView,FavoriteView,AddUpdateFavoriteView,OrderView,CreateOrderView,DeleteOrderView,PaymentSuccessView
 
 urlpatterns = [
     path('cart/',CartView.as_view()),
@@ -11,4 +11,6 @@ urlpatterns = [
     path('order/',OrderView.as_view()),
     path('order/create/',CreateOrderView.as_view()),
     path('order/delete/',DeleteOrderView.as_view()),
+    path('payment_success/',PaymentSuccessView.as_view()),
+
 ]

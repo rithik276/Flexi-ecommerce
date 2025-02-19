@@ -124,7 +124,7 @@ const CartList = ({ item }) => {
           </div>
         </div>
         <div className="flex items-center justify-center place-self-end border-green-700">
-          <div onClick={() => deleteCart()} className="text-white">
+          <div onClick={() => deleteCart()} className="text-white cursor-pointer">
             <DeleteOutlinedIcon fontSize="large" />
           </div>
         </div>

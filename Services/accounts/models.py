@@ -8,6 +8,8 @@ class User(AbstractBaseUser):
     id = models.UUIDField(primary_key=True,editable=False,unique=True,default=uuid.uuid4)
     email = models.EmailField(verbose_name = "Email",max_length = 225,unique = True)
     name = models.CharField(max_length = 255,unique=True)
+    address = models.TextField(null=True,blank=True)
+    phone = models.CharField(max_length=100,null=True)
     is_active = models.BooleanField(default = True)
     is_admin = models.BooleanField(default = False)
     created_at = models.DateTimeField(auto_now_add=True)

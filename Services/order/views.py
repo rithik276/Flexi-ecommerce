@@ -4,19 +4,26 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 import json
+import os
 
 from .models import Cart,Favorite,Order,CartProduct
 from products.models import Product,ProductVariant
 from .serializers import CartSerializer,FavoriteSerializer,OrderSerializer
+
+import razorpay
 
 class CartView(APIView):
     def get(self,request):
         user=request.user
         if user.is_authenticated:
             carts=Cart.objects.filter(user=user)
-            serializer=CartSerializer(carts,many=True).data[0]
-            for product in serializer['products']:
-                product['size_stock'] = [{size:stock} for size,stock in product['size_stock'].items() if stock > 0]
+            serializer=CartSerializer(carts,many=True).data
+            if serializer:
+                serializer = serializer[0]
+                for product in serializer['products']:
+                    product['price'] = float(product['price'])
+                    product['size_stock'] = [{size:stock} for size,stock in product['size_stock'].items() if stock > 0]
+            
             return Response(serializer,status=status.HTTP_200_OK)
         else:
             return Response({"message":"Please Login First"},status=status.HTTP_400_BAD_REQUEST)
@@ -100,7 +107,8 @@ class FavoriteView(APIView):
             return Response(serializer,status=status.HTTP_200_OK)
         else:
             return Response({"message":"Please Login First"},status=status.HTTP_400_BAD_REQUEST)
-        
+
+
 class AddUpdateFavoriteView(CartView):
 
     def post(self,request):
@@ -156,7 +164,6 @@ class OrderView(APIView):
         return Response({"orders":serializer,"msg":'order fetched successfully'},status=status.HTTP_200_OK)
 
 
-
 class CreateOrderView(APIView):
     '''
     #PAYLOAD
@@ -183,6 +190,13 @@ class CreateOrderView(APIView):
             except Cart.DoesNotExist:
                 return Response({"error": "Cart not found"}, status=status.HTTP_400_BAD_REQUEST)
             
+            client = razorpay.Client(auth = (os.environ['RP_PUBLIC_KEY'], os.environ['RP_SECRET_KEY']))
+
+            payment = client.order.create({
+                "amount" : int(data['paid_amount']) * 100,
+                "currency" : "INR",
+                "payment_capture" : "1"})
+        
             # Extract necessary fields and create Order object
             order_data = {
                 'user': user,
@@ -190,11 +204,18 @@ class CreateOrderView(APIView):
                 'paid_amount': data['paid_amount'],
                 'shipping_address': data['shipping_address'],
                 'phone': data['phone'],
+                'is_paid' : False,
+                'payment_id':payment['id']
             }
 
             try:
                 order_item = Order.objects.create(**order_data)
-                return Response({"message": "Order created successfully"}, status=status.HTTP_201_CREATED)
+                order_serializer = OrderSerializer(order_item)
+                res = {
+                        "payment": payment,
+                        "order": order_serializer.data
+                    }
+                return Response({"message": "Order created successfully","data": res}, status=status.HTTP_201_CREATED)
             except ValidationError as e:
                 return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -217,9 +238,51 @@ class DeleteOrderView(APIView):
             return Response({"error": "User not logged in"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+class PaymentSuccessView(APIView):
+
+    def post(self,request):
+        user_id = request.user.id
+        res = json.loads(request.data["response"])
+        ord_id = ""
+        raz_pay_id = ""
+        raz_signature = ""
+
+        for key in res.keys():
+            if key == 'razorpay_order_id':
+                ord_id = res[key]
+            elif key == 'razorpay_payment_id':
+                raz_pay_id = res[key]
+            elif key == 'razorpay_signature':
+                raz_signature = res[key]
+
+        order = Order.objects.get(payment_id=ord_id)
+
+        # we will pass this whole data in razorpay client to verify the payment
+        data = {
+            'razorpay_order_id': ord_id,
+            'razorpay_payment_id': raz_pay_id,
+            'razorpay_signature': raz_signature
+        }
+
+
+
+        client = razorpay.Client(auth=(os.environ.get('RP_PUBLIC_KEY'), os.environ.get('RP_SECRET_KEY')))
         
+        try:
+            util = razorpay.Utility(client)
+            check = util.verify_payment_signature(data)
+        except Exception as e:
+            return Response({'error': "error in Verification. please try again"},status=status.HTTP_417_EXPECTATION_FAILED)
 
+        order.isPaid = True
+        order.save()
+        cart_delete = Cart.objects.filter(user = user_id).delete()
 
+        res_data = {
+            'message': 'payment successfully received!'
+        }
+
+        return Response(res_data, status=status.HTTP_200_OK)
 
 
 
