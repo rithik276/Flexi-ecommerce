@@ -7,6 +7,7 @@ import Cart from "./containers/Cart/Cart";
 import Favorite from "./containers/Favorite/Favorite";
 import ProductsPage from "./containers/Products/ProductsPage";
 import Checkout from "./containers/Checkout/Checkout";
+import Login from "./containers/Auth/Login";
 
 const App = () => {
   const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const App = () => {
     {
       path: "/checkout",
       element: <Checkout />,
+    },
+    {
+      path: "/login",
+      element: <Login/>,
     },
   ]);
   return <RouterProvider router={router} />;
